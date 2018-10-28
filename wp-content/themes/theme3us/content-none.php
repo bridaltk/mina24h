@@ -1,0 +1,1 @@
+<p><?php esc_html_e( 'Xin lỗi! Danh mục này hiện tại chưa có bài viết nào!', 'threeus' ); ?></p>
