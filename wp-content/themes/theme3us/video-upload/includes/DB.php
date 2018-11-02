@@ -5,9 +5,9 @@ class DB {
 	function __construct(){
 		// Database configuration
 		$dbHost = 'localhost';
-		$dbUsername = 'testweb_vnjpblog';
-		$dbPassword = 'CD47TQVc7D';
-		$dbName = 'testweb_vnjpblog';
+		$dbUsername = 'mina24h_admin';
+		$dbPassword = 'egmZ@!px8=!O';
+		$dbName = 'mina24h_videos';
 		
 		// Connect database
 		$conn = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);

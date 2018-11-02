@@ -7,5 +7,5 @@ unset($_SESSION['google_data']); //Google session data unset
 $client->revokeToken();
 session_destroy();
 $id = $_SESSION['post_id'];
-header('Location:http://vnjpblog.testyoursite.top/wp-admin/post.php?post=' . $id . '&action=edit');exit;
+header('Location:http://nguoilapthach.com/wp-admin/post.php?post=' . $id . '&action=edit');exit;
 ?>

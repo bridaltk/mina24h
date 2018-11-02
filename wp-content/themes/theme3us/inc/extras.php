@@ -846,4 +846,18 @@ function wpb_sender_name( $original_email_from ) {
 // Hooking up our functions to WordPress filters 
 add_filter( 'wp_mail_from', 'wpb_sender_email' );
 add_filter( 'wp_mail_from_name', 'wpb_sender_name' );
+
+/**
+ * Check if a contributor have the needed rights to upload images and add this capabilities if needed.
+ */
+			
+add_action( 'pre_get_posts', 'users_own_attachments');
+function users_own_attachments( $wp_query_obj )
+    {
+        global $current_user, $pagenow;
+
+        if ( $pagenow == 'upload.php' || ( $pagenow == 'admin-ajax.php' && !empty( $_POST[ 'action' ] ) && $_POST[ 'action' ] == 'query-attachments' ) ) {
+            $wp_query_obj->set( 'author', $current_user->ID );
+        }
+    }
 ?>

@@ -114,6 +114,14 @@ include_once get_template_directory() . '/inc/structure/header-account.php'; ?>
 
                     update_field( 'blogs_top', $posts_top, $post_id );
 
+                    $user_info = get_userdata($post_author_id);
+                    $admin_to = $user_info->user_email;
+                    $admin_subject = "Thông báo duyệt bài";
+                    $admin_txt = "Xin chào " . $user_info->display_name . "!" . "\r\n" . "Bài viết của bạn đã được ban quản trị của chúng tôi duyệt. Cảm ơn bạn đã gửi bài viết cho chúng tôi. Hy vọng chúng tôi sẽ nhận được nhiều bài viết của bạn hơn nữa để cộng đồng Mina24h ngày càng phát triển!" . "\r\n" . "Xem bài viết tại đây: " . get_the_permalink($post_id);
+                    $admin_headers = "From: admin@mina24h.com";
+
+                    mail($admin_to,$admin_subject,$admin_txt,$admin_headers);
+
                 } else {
                     $post = array(
                         'post_title'    => wp_strip_all_tags($mp_title),
@@ -287,14 +295,7 @@ include_once get_template_directory() . '/inc/structure/header-account.php'; ?>
                    <div class="mp-post-video">
                         <h3><?php echo esc_html_e( 'Upload video' , 'threeus' ); ?></h3>
                         <div class="mp-content ">
-                            <label><?php echo esc_html__('Tiêu đề'); ?><input type="text" name="video_title"></label>
-                            <label><?php echo esc_html__('Mô tả'); ?><textarea name="video_desc"></textarea></label>
-                            <label for="mp-video" class="custom-file-upload"><?php echo esc_html__('Chọn video upload'); ?>
-                                <input type="file" id="mp-video" accept="video/mp4,video/x-m4v,video/*" name="mp_video">
-                            </label>
-                            <video width="400" controls>
-                                <source src="mov_bbb.mp4" id="video_preview">
-                            </video>
+                            <a href="<?php echo get_field( 'acf_upvideo','option' ); ?>" target="_Blank"><?php echo esc_html__('Chọn video upload'); ?></a>
                         </div>
                    </div>
                 </div><!-- .member-publish-content -->

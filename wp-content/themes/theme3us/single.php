@@ -34,7 +34,7 @@
 								<div class="content-left">
 									<ul class="sharing">
 										<li>
-											<a class="fl chiasefb" target="_blank" href="http://www.facebook.com/sharer.php?u=<?php the_permalink(); ?>" rel="nofollow"><i class="fa fa-facebook"></i></a>
+											<a class="fl chiasefb" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo get_the_permalink(); ?>" rel="nofollow"><i class="fa fa-facebook"></i></a>
 											<span><?php echo threeus_get_shares( get_the_permalink() ); ?></span>
 										</li>
 										<li>

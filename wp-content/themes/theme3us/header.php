@@ -112,7 +112,7 @@
 								<a class="pri-button" href="<?php echo get_field('acf_new_post', 'option') ?>"><i class="fa fa-plus-circle" aria-hidden="true"></i> <span><?php esc_html_e( 'Viết bài', 'threeus' ); ?></span></a>
 
 							<?php } else { ?>
-								<a class="show-login-form pri-button" href="#"><i class="fa fa-plus-circle" aria-hidden="true"></i> <span><?php esc_html_e( 'Viết bài', 'threeus' ); ?></span></a>
+								<a class="show-login-form pri-button" href="<?php echo wp_login_url( $current_url ); ?>"><i class="fa fa-plus-circle" aria-hidden="true"></i> <span><?php esc_html_e( 'Viết bài', 'threeus' ); ?></span></a>
 							<?php }; ?>
 						</div>
 

@@ -189,6 +189,12 @@ if ( function_exists( 'register_field_group' ) ) {
 					'name'         => 'acf_copyright',
 					'type'         => 'text',
 				),
+				array(
+					'key'          => 'field_a455tgrees',
+					'label'        =>  __( 'Upload Video URL', 'threeus' ),
+					'name'         => 'acf_upvideo',
+					'type'         => 'url',
+				),
 			),
 			'location' => array(
 				array(

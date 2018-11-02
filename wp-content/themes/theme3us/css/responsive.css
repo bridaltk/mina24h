@@ -602,8 +602,9 @@
 		margin-bottom: 0;
 	}
 	.blogs-slider .owl-nav .owl-next, .blogs-slider .owl-nav .owl-prev{
-		height: 55px;
-    	line-height: 55px;
+		height: 80px;
+    	line-height: 80px;
+    	top: 70px;
 	}
 	.associate-wrapper{
 		padding: 0 30px;

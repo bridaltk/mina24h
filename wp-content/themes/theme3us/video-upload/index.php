@@ -34,12 +34,12 @@ if( isset( $_GET['id'] ) ) {
 <body>
 	<div class="youtube-box">
 		<h1>Upload video to YouTube using PHP</h1>
-		<form method="post" name="multiple_upload_form" id="multiple_upload_form" enctype="multipart/form-data" action="youtube_upload.php">
+		<form method="post" name="multiple_upload_form" id="multiple_upload_form" enctype="multipart/form-data" action="https://mina24h.com/wp-content/themes/theme3us/video-upload/youtube_upload.php">
 		<?php echo (!empty($errorMsg))?'<p class="err-msg">'.$errorMsg.'</p>':''; ?>
 		<label for="title">Title:</label><input type="text" name="title" id="title" value="<?php echo $title; ?>" />
 		<label for="description">Description:</label> <textarea name="description" id="description" cols="20" rows="2" ></textarea>
 		<label for="tags">Tags:</label> <input type="text" name="tags" id="tags" value="" />
-		<label for="video_file">Choose Video File:</label>	<input value="<?php echo $source; ?>" type="text" name="videoFile" id="videoFile" >
+		<label for="video_file">Choose Video File:</label>	<input value="<?php echo $source; ?>" type="file" name="videoFile" id="videoFile" >
 		<input name="post_id" type="hidden" value="<?php echo $id; ?>">
 		<input name="videoSubmit" id="submit" type="submit" value="Upload">
 		</form>

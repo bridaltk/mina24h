@@ -6,7 +6,7 @@
  * @param string $url ID We want to get number of shares of this URL
  */
 function threeus_get_shares( $url ){
-	$access_token = '313677769198071|a4e73112cdd2eb16561a7ceed796c66f';
+	$access_token = '2162246310709575|10a76577998328bde79a494eb2d82d53';
 	$api_url = 'https://graph.facebook.com/v3.0/?id=' . urlencode( $url ) . '&fields=engagement&access_token=' . $access_token;
 	$fb_connect = curl_init(); // initializing
 	curl_setopt( $fb_connect, CURLOPT_URL, $api_url );

@@ -1,9 +1,9 @@
 <?php
     // OAUTH Configuration
-    $oauthClientID = '192971528368-35fdd31llj4538go4rdk2vceja2p6ptu.apps.googleusercontent.com';
-    $oauthClientSecret = 'EUtivIJlqx_IFAv55BhUHt91';
-    $baseUri = 'http://vnjpblog.testyoursite.top/wp-content/themes/theme3us/video-upload/';
-    $redirectUri = 'http://vnjpblog.testyoursite.top/wp-content/themes/theme3us/video-upload/youtube_upload.php';
+    $oauthClientID = '280891686179-g6g0n4efuce4qpb9osu0o1224ar4ghlm.apps.googleusercontent.com';
+    $oauthClientSecret = 'ZsHDoQ7ccfR-vI8eM1MzHWVz';
+    $baseUri = 'https://mina24h.com/wp-content/themes/theme3us/video-upload/';
+    $redirectUri = 'https://mina24h.com/wp-content/themes/theme3us/video-upload/youtube_upload.php';
     
     define('OAUTH_CLIENT_ID',$oauthClientID);
     define('OAUTH_CLIENT_SECRET',$oauthClientSecret);
