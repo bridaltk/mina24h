@@ -109,11 +109,6 @@ if( class_exists('acf') ) {
 require get_template_directory() . '/inc/aq_resizer.php';
 
 /**
- * Socials Share counts
- */
-require get_template_directory() . '/inc/share_count.php';
-
-/**
  * Additions custom widgets wordpress
  */
 require get_template_directory() . '/inc/widgets/blog.php';
@@ -140,13 +135,6 @@ endif;
 require get_template_directory() . '/inc/extras.php';
 
 require get_template_directory() . '/inc/add-metabox.php';
-
-/**
- * Additions function for woocommerce plugin.
- */
-if ( class_exists( 'Woocommerce' ) ) {
-	require get_template_directory() . '/inc/wc.php';
-}
 
 /**
  * Additions css for admin.

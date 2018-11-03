@@ -33,18 +33,6 @@
 							<div class="content-main clearfix">
 								<div class="content-left">
 									<ul class="sharing">
-										<li>
-											<a class="fl chiasefb" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo get_the_permalink(); ?>" rel="nofollow"><i class="fa fa-facebook"></i></a>
-											<span><?php echo threeus_get_shares( get_the_permalink() ); ?></span>
-										</li>
-										<li>
-											<a rel="nofollow" title="Twitter" href="https://twitter.com/share?url=<?php the_permalink(); ?>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="fa fa-twitter"></i></a>
-											<span><?php echo $count; ?></span>
-										</li>
-										<li>
-											<a rel="nofollow" title="Googleplus" href="https://plus.google.com/share?url=<?php the_permalink(); ?>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="fa fa-google-plus"></i></a>
-											<span><?php echo getGplusShares( get_the_permalink() ); ?></span>
-										</li>
 										<li class="comment-count">
 											<a rel="nofollow" href="#comment-form-area"><i class="fa fa-commenting"></i></a>
 											<span><?php echo get_comments_number( $post->ID ); ?></span>
@@ -53,6 +41,7 @@
 											<?php echo do_shortcode( '[wp_ulike]' ); ?>
 										</li>
 									</ul><!-- .sharing -->
+									<?php echo do_shortcode('[social_warfare]'); ?>
 								</div><!-- .content-left -->
 								
 								<div class="content-right">

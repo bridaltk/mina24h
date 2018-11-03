@@ -3237,3 +3237,13 @@ body.author .site-main{
 	padding: 8px 0;
 	height: 100% !important;
 }
+.content-left .swp_social_panel{
+	height: auto;
+}
+.content-left .swp_social_panel .nc_tweetContainer{
+	margin: 0 0 5px 0 !important;
+	flex: inherit !important;
+}
+.content-left .swp_social_panel .nc_tweetContainer .nc_tweet{
+	width: 80px;
+}

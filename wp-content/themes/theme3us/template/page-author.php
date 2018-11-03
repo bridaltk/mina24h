@@ -81,7 +81,8 @@ get_header(); ?>
 						$args = array(
 							'offset'  => $offset,
 							'number'  => $number,
-							'orderby' => 'user_registered',
+							'meta_key' => 'user_register',
+							'orderby' => 'meta_value_num',
 							'order'	  => 'DESC',
 						);
 					} else {

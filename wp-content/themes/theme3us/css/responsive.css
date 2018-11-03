@@ -476,6 +476,13 @@
 	    text-align: left;
 	    margin-top: 30px;
 	}
+	.content-left .swp_social_panel .nc_tweetContainer{
+		margin: 0 5px 5px 0 !important;
+		flex: 1 !important;
+	}
+	.content-left .swp_social_panel .nc_tweetContainer .nc_tweet{
+		width: auto;
+	}
 }
 
 @media screen and (max-width: 576px){

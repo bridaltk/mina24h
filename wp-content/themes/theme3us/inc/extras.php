@@ -177,6 +177,15 @@ function get_BFI_thumbnail( $att, $width, $height, $surl = false, $classes = NUL
 	}
 }
 
+$users = get_users();
+foreach( $users as $user ) {
+$udata = get_userdata( $user->ID );
+$registered = $udata->user_registered;
+update_field( 'user_register', date( "d/m/Y g:i a", strtotime( $registered ) ), 'user_' . $user->ID  );
+}
+
+
+
 /**
  * Add wordpres ajax url to head tag
  *
@@ -860,4 +869,7 @@ function users_own_attachments( $wp_query_obj )
             $wp_query_obj->set( 'author', $current_user->ID );
         }
     }
+
+
+
 ?>
