@@ -66,37 +66,35 @@ get_header(); ?>
                 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
                 $offset = ($paged - 1) * $number;
 
-                if (isset($_GET['orderby']) && $_GET['orderby'] == 'post_count') {
-                    $args = array(
-                        'offset' => $offset,
-                        'number' => $number,
-                        'orderby' => 'post_count',
-                        'order' => 'DESC',
-                    );
-                } elseif (isset($_GET['orderby']) && $_GET['orderby'] == 'order_rating') {
-                    $args = array(
-                        'offset' => $offset,
-                        'number' => $number,
-                        'meta_key' => 'rating_average',
-                        'orderby' => 'meta_value_num',
-                        'order' => 'DESC',
-                    );
-                } elseif (isset($_GET['orderby']) && $_GET['orderby'] == 'order_new') {
-                    $args = array(
-                        'offset' => $offset,
-                        'number' => $number,
-                        'meta_key' => 'user_register',
-                        'orderby' => 'meta_value_num',
-                        'order' => 'DESC',
-                    );
-                } else {
-                    $args = array(
-                        'offset' => $offset,
-                        'number' => $number,
-                        'orderby' => 'post_count',
-                        'order' => 'DESC',
-                    );
-                }
+                switch ($orderby) {
+                    case 'order_rating':
+                        $args = array(
+                            'offset' => $offset,
+                            'number' => $number,
+                            'meta_key' => 'rating_average',
+                            'orderby' => 'meta_value_num',
+                            'order' => 'DESC',
+                        );
+                        break;
+                    case 'order_new':
+                        $args = array(
+                            'offset' => $offset,
+                            'number' => $number,
+                            'meta_key' => 'user_register',
+                            'orderby' => 'meta_value_num',
+                            'order' => 'DESC',
+                        );
+                        break;
+                    default:
+                        $args = array(
+                            'offset' => $offset,
+                            'number' => $number,
+                            'orderby' => 'post_count',
+                            'order' => 'DESC',
+                        );
+                        break;
+
+                };
                 $authors = get_users($args);
                 // var_dump( $authors );
 
