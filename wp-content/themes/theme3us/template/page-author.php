@@ -96,22 +96,13 @@ get_header(); ?>
 
                 };
                 $authors = get_users($args);
-                // var_dump( $authors );
-
-                // $point = get_field('user_point','user_' . $author->ID);
-                // var_dump( $author );
-                // if ($point > 0) {
-
-                $users_args = array(
-                    'orderby' => 'post_count',
-                    'order' => 'DESC',
-                    'role__in' => array('author', 'administrator')
-                );
-                $users = get_users($users_args);
+                $sql = "SELECT distinct post_author FROM `wp_posts` WHERE post_type='post' and post_status='publish'";
+                global $wpdb;
+                $users = $wpdb->get_results($sql);
                 $total_users = count($users);
                 $total_query = count($authors);
                 $total_pages = intval(($total_users - 1) / $number) + 1;
-                //                error_log("number: " . $number . " offet: " . $offset . " total qeury: " . $total_query . " totaol user: " . $total_users . " total page: " . $total_pages);
+                //error_log("number: " . $number . " offet: " . $offset . " total qeury: " . $total_query . " totaol user: " . $total_users . " total page: " . $total_pages);
                 ?>
 
                 <?php if (isset($_GET['view']) && $_GET['view'] == 'list') : ?>
