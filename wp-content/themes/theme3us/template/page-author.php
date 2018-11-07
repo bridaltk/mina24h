@@ -68,41 +68,40 @@ get_header(); ?>
 
                 switch ($orderby) {
                     case 'order_rating':
-                        $args = array(
-                            'offset' => $offset,
-                            'number' => $number,
-                            'meta_key' => 'rating_average',
-                            'orderby' => 'meta_value_num',
-                            'order' => 'DESC',
-                        );
+                        $sql = "SELECT u.*, m.meta_value
+                            FROM wp_users u, wp_usermeta m
+                            where u.id in (SELECT distinct post_author FROM `wp_posts` WHERE post_type='post' and post_status='publish')
+                            and m.user_id=u.id 
+                            and m.meta_key='rating_average' 
+                            order by m.meta_value desc";
                         break;
                     case 'order_new':
-                        $args = array(
-                            'offset' => $offset,
-                            'number' => $number,
-                            'meta_key' => 'user_register',
-                            'orderby' => 'meta_value_num',
-                            'order' => 'DESC',
-                        );
+                        $sql = "SELECT u.*, COUNT(p.id) as post_count  
+                            FROM wp_posts p, wp_users u 
+                            where p.post_type='post' 
+                            and p.post_status='publish' 
+                            and u.id = p.post_author 
+                            GROUP by p.post_author
+                            order by u.user_registered DESC";
                         break;
                     default:
-                        $args = array(
-                            'offset' => $offset,
-                            'number' => $number,
-                            'orderby' => 'post_count',
-                            'order' => 'DESC',
-                        );
+                        $sql = "SELECT u.*, COUNT(p.id) as post_count 
+                            FROM wp_posts p, wp_users u 
+                            where p.post_type='post' 
+                            and p.post_status='publish' 
+                            and u.id = p.post_author 
+                            GROUP by p.post_author
+                            order by post_count DESC";
                         break;
 
                 };
-                $authors = get_users($args);
-                $sql = "SELECT distinct post_author FROM `wp_posts` WHERE post_type='post' and post_status='publish'";
+
                 global $wpdb;
                 $users = $wpdb->get_results($sql);
                 $total_users = count($users);
-                $total_query = count($authors);
+                $total_query = count($users);
                 $total_pages = intval(($total_users - 1) / $number) + 1;
-                //error_log("number: " . $number . " offet: " . $offset . " total qeury: " . $total_query . " totaol user: " . $total_users . " total page: " . $total_pages);
+                //                error_log("number: " . $number . " offet: " . $offset . " total qeury: " . $total_query . " totaol user: " . $total_users . " total page: " . $total_pages);
                 ?>
 
                 <?php if (isset($_GET['view']) && $_GET['view'] == 'list') : ?>
@@ -116,8 +115,8 @@ get_header(); ?>
                         </tr>
                         </thead>
                         <tbody>
-                        <?php foreach ($authors as $author) { ?>
-                            <?php if (count_user_posts($author->ID) > 0) : ?>
+                        <?php foreach ($users as $author) { ?>
+                            <?php if (count_user_posts($author->id) > 0) : ?>
                                 <tr>
                                     <td data-title="<?php echo esc_html__('Tác giả', 'threeus'); ?>">
                                         <a href="<?php echo get_author_posts_url($author->ID); ?>">
@@ -181,6 +180,7 @@ get_header(); ?>
                         echo '<nav class="page-nav">';
                         $current_page = max(1, get_query_var('page'));
                         $big = 999999999;
+                        /*
                         echo paginate_links(array(
                             'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
                             'format' => isset($orderby) ? '&paged=%#%' : '?paged=%#%',
@@ -189,14 +189,14 @@ get_header(); ?>
                             'type' => 'plain',
                             'prev_text' => '<i class="fa fa-angle-left"></i>',
                             'next_text' => '<i class="fa fa-angle-right"></i>'
-                        ));
+                        ));*/
                         echo '</nav>';
                         echo '</div>';
                     }
                     ?>
                 <?php else : ?>
                     <div class="row">
-                        <?php foreach ($authors as $author) { ?>
+                        <?php foreach ($users as $author) { ?>
                             <?php if (count_user_posts($author->ID) > 0) : ?>
                                 <div class="col-lg-3 col-md-4 col-sm-12 col-12">
                                     <div class="member-item">
@@ -269,6 +269,7 @@ get_header(); ?>
                         echo '<div class="page-navigation clearfix" role="navigation">';
                         echo '<nav class="page-nav">';
                         $current_page = max(1, get_query_var('paged'));
+                        /*
                         echo paginate_links(array(
                             'base' => get_pagenum_link(1) . '%_%',
                             'format' => isset($orderby) ? '&paged=%#%' : '?paged=%#%',
@@ -277,7 +278,7 @@ get_header(); ?>
                             'type' => 'plain',
                             'prev_text' => '<i class="fa fa-angle-left"></i>',
                             'next_text' => '<i class="fa fa-angle-right"></i>'
-                        ));
+                        ));*/
                         echo '</nav>';
                         echo '</div>';
                     }
