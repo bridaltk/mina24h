@@ -63,8 +63,16 @@ get_header(); ?>
                 <?php
                 $number = 12;
                 $orderby = $_GET['orderby'];
+                //                if (!isset($orderby)) {
+                //                    $orderby = 'post_count';
+                //                }
+                $view = $_GET['view'];
+                if (!isset($view)) {
+                    $view = 'grid';
+                }
                 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
                 $offset = ($paged - 1) * $number;
+
 
                 switch ($orderby) {
                     case 'order_rating':
@@ -95,16 +103,15 @@ get_header(); ?>
                         break;
 
                 };
-
                 global $wpdb;
+                $sql = $sql . " LIMIT " . $number . " OFFSET " . $offset;
                 $users = $wpdb->get_results($sql);
-                $total_users = count($users);
-                $total_query = count($users);
+                $total_users = $wpdb->get_var("SELECT count(distinct post_author) FROM `wp_posts` WHERE post_type='post' and post_status='publish'");
                 $total_pages = intval(($total_users - 1) / $number) + 1;
                 //                error_log("number: " . $number . " offet: " . $offset . " total qeury: " . $total_query . " totaol user: " . $total_users . " total page: " . $total_pages);
                 ?>
 
-                <?php if (isset($_GET['view']) && $_GET['view'] == 'list') : ?>
+                <?php if ($view == 'list') : ?>
                     <table class="member-list table table-bordered table-customize table-responsive">
                         <thead>
                         <tr>
@@ -116,174 +123,147 @@ get_header(); ?>
                         </thead>
                         <tbody>
                         <?php foreach ($users as $author) { ?>
-                            <?php if (count_user_posts($author->id) > 0) : ?>
-                                <tr>
-                                    <td data-title="<?php echo esc_html__('Tác giả', 'threeus'); ?>">
-                                        <a href="<?php echo get_author_posts_url($author->ID); ?>">
-                                            <?php echo threeus_get_avatar($author->ID, 40); ?>
-                                            <span><?php the_author_meta('display_name', $author->ID); ?></span>
-                                        </a>
-                                    </td>
-                                    <td data-title="<?php echo esc_html__('Nghề nghiệp', 'threeus'); ?>">
-                                        <?php echo get_field('user_job', 'user_' . $author->ID); ?>
-                                    </td>
-                                    <td data-title="<?php echo esc_html__('Số bài viết', 'threeus'); ?>">
-                                        <?php echo count_user_posts($author->ID) . ' bài'; ?>
-                                    </td>
-                                    <td data-title="<?php echo esc_html__('Đánh giá', 'threeus'); ?>">
-                                        <?php
-                                        $args = array(
-                                            'author' => $author->ID,
-                                            'posts_per_page' => -1
-                                        );
-                                        $loop = new WP_Query($args);
-                                        $posts_id = [];
-                                        while ($loop->have_posts()) : $loop->the_post();
-                                            array_push($posts_id, get_the_ID());
-                                        endwhile;
-                                        wp_reset_query();
-                                        $count_posts = wp_count_posts();
-                                        $published_posts = $count_posts->publish;
-                                        $sum = 0;
-                                        $i = 0;
-                                        $kk = kk_star_ratings_get(intval($published_posts));
-                                        foreach ($kk as $post) {
-                                            if (in_array($post->ID, $posts_id)) {
-                                                $sum = $sum + $post->ratings;
-                                                $i++;
-                                            }
+                            <tr>
+                                <td data-title="<?php echo esc_html__('Tác giả', 'threeus'); ?>">
+                                    <a href="<?php echo get_author_posts_url($author->ID); ?>">
+                                        <?php echo threeus_get_avatar($author->ID, 40); ?>
+                                        <span><?php the_author_meta('display_name', $author->ID); ?></span>
+                                    </a>
+                                </td>
+                                <td data-title="<?php echo esc_html__('Nghề nghiệp', 'threeus'); ?>">
+                                    <?php echo get_field('user_job', 'user_' . $author->ID); ?>
+                                </td>
+                                <td data-title="<?php echo esc_html__('Số bài viết', 'threeus'); ?>">
+                                    <?php echo count_user_posts($author->ID) . ' bài'; ?>
+                                </td>
+                                <td data-title="<?php echo esc_html__('Đánh giá', 'threeus'); ?>">
+                                    <?php
+                                    $args = array(
+                                        'author' => $author->ID,
+                                        'posts_per_page' => -1
+                                    );
+                                    $loop = new WP_Query($args);
+                                    $posts_id = [];
+                                    while ($loop->have_posts()) : $loop->the_post();
+                                        array_push($posts_id, get_the_ID());
+                                    endwhile;
+                                    wp_reset_query();
+                                    $count_posts = wp_count_posts();
+                                    $published_posts = $count_posts->publish;
+                                    $sum = 0;
+                                    $i = 0;
+                                    $kk = kk_star_ratings_get(intval($published_posts));
+                                    foreach ($kk as $post) {
+                                        if (in_array($post->ID, $posts_id)) {
+                                            $sum = $sum + $post->ratings;
+                                            $i++;
                                         }
-                                        if ($i == 0) {
-                                            echo '<span class="rating">Chưa có đánh giá</span>';
-                                            update_field('rating_average', 0, 'user_' . $author->ID);
-                                        } else {
-                                            $rating = number_format((floatval($sum) / (int)$i), 1);
-                                            update_field('rating_average', $rating, 'user_' . $author->ID);
-                                            $rating_per = ($rating / 5) * 100;
-                                            ?>
-                                            <span class="rating">
+                                    }
+                                    if ($i == 0) {
+                                        echo '<span class="rating">Chưa có đánh giá</span>';
+                                        update_field('rating_average', 0, 'user_' . $author->ID);
+                                    } else {
+                                        $rating = number_format((floatval($sum) / (int)$i), 1);
+                                        update_field('rating_average', $rating, 'user_' . $author->ID);
+                                        $rating_per = ($rating / 5) * 100;
+                                        ?>
+                                        <span class="rating">
 																<span class="rating_star"><span
                                                                             style="width: <?php echo $rating_per; ?>%"></span></span>
 															</span>
-                                            <?php
-                                        }
-                                        ?>
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
+                                        <?php
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
                         <?php } ?>
                         </tbody>
                     </table>
-                    <?php
-                    if ($total_query > $number) {
-                        echo '<div class="page-navigation clearfix" role="navigation">';
-                        echo '<nav class="page-nav">';
-                        $current_page = max(1, get_query_var('page'));
-                        $big = 999999999;
-                        /*
-                        echo paginate_links(array(
-                            'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-                            'format' => isset($orderby) ? '&paged=%#%' : '?paged=%#%',
-                            'current' => $current_page,
-                            'total' => $total_pages,
-                            'type' => 'plain',
-                            'prev_text' => '<i class="fa fa-angle-left"></i>',
-                            'next_text' => '<i class="fa fa-angle-right"></i>'
-                        ));*/
-                        echo '</nav>';
-                        echo '</div>';
-                    }
-                    ?>
                 <?php else : ?>
                     <div class="row">
                         <?php foreach ($users as $author) { ?>
-                            <?php if (count_user_posts($author->ID) > 0) : ?>
-                                <div class="col-lg-3 col-md-4 col-sm-12 col-12">
-                                    <div class="member-item">
-                                        <div class="member-avatar">
-                                            <a class="hover" href="<?php echo get_author_posts_url($author->ID); ?>">
-                                                <?php echo threeus_get_avatar($author->ID, 195); ?>
-                                            </a>
-                                        </div><!-- member-thumb -->
-                                        <div class="member-info">
-                                            <h3 class="member-name"><a
-                                                        href="<?php echo get_author_posts_url($author->ID); ?>"><?php the_author_meta('display_name', $author->ID); ?></a>
-                                            </h3>
-                                            <span class="member-job"><?php echo get_field('user_job', 'user_' . $author->ID); ?></span>
-                                            <div class="member-bot">
-                                                <div class="member-rating">
-                                                    <?php
-                                                    $args = array(
-                                                        'author' => $author->ID,
-                                                        'posts_per_page' => -1
-                                                    );
-                                                    $loop = new WP_Query($args);
-                                                    $posts_id = [];
-                                                    while ($loop->have_posts()) : $loop->the_post();
-                                                        array_push($posts_id, get_the_ID());
-                                                    endwhile;
-                                                    wp_reset_query();
-                                                    $count_posts = wp_count_posts();
-                                                    $published_posts = $count_posts->publish;
-                                                    $sum = 0;
-                                                    $i = 0;
-                                                    $kk = kk_star_ratings_get(intval($published_posts));
-                                                    foreach ($kk as $post) {
-                                                        if (in_array($post->ID, $posts_id)) {
-                                                            $sum = $sum + $post->ratings;
-                                                            $i++;
-                                                        }
+                            <div class="col-lg-3 col-md-4 col-sm-12 col-12">
+                                <div class="member-item">
+                                    <div class="member-avatar">
+                                        <a class="hover" href="<?php echo get_author_posts_url($author->ID); ?>">
+                                            <?php echo threeus_get_avatar($author->ID, 195); ?>
+                                        </a>
+                                    </div><!-- member-thumb -->
+                                    <div class="member-info">
+                                        <h3 class="member-name"><a
+                                                    href="<?php echo get_author_posts_url($author->ID); ?>"><?php the_author_meta('display_name', $author->ID); ?></a>
+                                        </h3>
+                                        <span class="member-job"><?php echo get_field('user_job', 'user_' . $author->ID); ?></span>
+                                        <div class="member-bot">
+                                            <div class="member-rating">
+                                                <?php
+                                                $args = array(
+                                                    'author' => $author->ID,
+                                                    'posts_per_page' => -1
+                                                );
+                                                $loop = new WP_Query($args);
+                                                $posts_id = [];
+                                                while ($loop->have_posts()) : $loop->the_post();
+                                                    array_push($posts_id, get_the_ID());
+                                                endwhile;
+                                                wp_reset_query();
+                                                $count_posts = wp_count_posts();
+                                                $published_posts = $count_posts->publish;
+                                                $sum = 0;
+                                                $i = 0;
+                                                $kk = kk_star_ratings_get(intval($published_posts));
+                                                foreach ($kk as $post) {
+                                                    if (in_array($post->ID, $posts_id)) {
+                                                        $sum = $sum + $post->ratings;
+                                                        $i++;
                                                     }
-                                                    if ($i == 0) {
-                                                        echo '<span class="rating">Chưa có đánh giá</span>';
-                                                        update_field('rating_average', 0, 'user_' . $author->ID);
-                                                    } else {
-                                                        $rating = number_format((floatval($sum) / (int)$i), 1);
-                                                        update_field('rating_average', $rating, 'user_' . $author->ID);
-                                                        $rating_per = ($rating / 5) * 100;
-                                                        ?>
-                                                        <span class="rating">
-																		<?php esc_html_e('Đánh giá', 'threeus'); ?>
-                                                            <span class="rating_star"><span
-                                                                        style="width: <?php echo $rating_per; ?>%"></span></span>
-																	</span>
-                                                        <?php
-                                                    }
+                                                }
+                                                if ($i == 0) {
+                                                    echo '<span class="rating">Chưa có đánh giá</span>';
+                                                    update_field('rating_average', 0, 'user_' . $author->ID);
+                                                } else {
+                                                    $rating = number_format((floatval($sum) / (int)$i), 1);
+                                                    update_field('rating_average', $rating, 'user_' . $author->ID);
+                                                    $rating_per = ($rating / 5) * 100;
                                                     ?>
+                                                    <span class="rating">
+																		<?php esc_html_e('Đánh giá', 'threeus'); ?>
+                                                        <span class="rating_star"><span
+                                                                    style="width: <?php echo $rating_per; ?>%"></span></span>
+																	</span>
+                                                    <?php
+                                                }
+                                                ?>
 
-                                                </div>
-                                                <div class="member-count">
-                                                    <span><?php echo esc_html__('Số bài viết: ') ?></span><?php echo count_user_posts($author->ID); ?>
-                                                </div>
                                             </div>
+                                            <div class="member-count">
+                                                <span><?php echo esc_html__('Số bài viết: ') ?></span><?php echo count_user_posts($author->ID); ?>
+                                            </div>
+                                        </div>
 
 
-                                        </div><!-- .member-info -->
-                                    </div><!-- .member-item -->
-                                </div>
-                            <?php endif; ?>
+                                    </div><!-- .member-info -->
+                                </div><!-- .member-item -->
+                            </div>
                         <?php } ?>
                     </div>
-                    <?php
-                    if ($total_users > $number) {
-                        echo '<div class="page-navigation clearfix" role="navigation">';
-                        echo '<nav class="page-nav">';
-                        $current_page = max(1, get_query_var('paged'));
-                        /*
-                        echo paginate_links(array(
-                            'base' => get_pagenum_link(1) . '%_%',
-                            'format' => isset($orderby) ? '&paged=%#%' : '?paged=%#%',
-                            'current' => $current_page,
-                            'total' => $total_pages,
-                            'type' => 'plain',
-                            'prev_text' => '<i class="fa fa-angle-left"></i>',
-                            'next_text' => '<i class="fa fa-angle-right"></i>'
-                        ));*/
-                        echo '</nav>';
-                        echo '</div>';
-                    }
-                    ?>
+
                 <?php endif; ?>
+                <?php
+                if ($total_users > $number) {
+                    echo '<div class="page-navigation clearfix" role="navigation">';
+                    echo '<nav class="page-nav">';
+                    echo paginate_links(array(
+                        'current' => $paged,
+                        'total' => $total_pages,
+                        'type' => 'plain',
+                        'prev_text' => '<i class="fa fa-angle-left"></i>',
+                        'next_text' => '<i class="fa fa-angle-right"></i>'
+                    ));
+                    echo '</nav>';
+                    echo '</div>';
+                }
+                ?>
                 <?php // }; ?>
             </div>
         </div><!-- .site-content -->
@@ -292,11 +272,5 @@ get_header(); ?>
     </div>
 
 </div><!-- .container -->
-
-<!-- <div class="content-bottom">
-	<div class="container">
-		 get_sidebar_secondary(); ?>
-	</div>
-</div> -->
 
 <?php get_footer(); ?>
