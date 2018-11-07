@@ -61,7 +61,7 @@ get_header(); ?>
                 </script>
                 <div class="site-author-content">
                     <?php
-                    $number = 12;
+                    $number = 16;
                     $orderby = $_GET['orderby'];
                     if (!isset($orderby)) {
                         $orderby = 'post_count';
@@ -70,8 +70,8 @@ get_header(); ?>
                     if (!isset($view)) {
                         $view = 'grid';
                     }
-                    $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-                    $offset = ($paged - 1) * $number;
+                    $current_page = (get_query_var('paged')) ? get_query_var('paged') : 1;
+                    $offset = ($current_page - 1) * $number;
 
 
                     switch ($orderby) {
@@ -254,7 +254,7 @@ get_header(); ?>
                         echo '<div class="page-navigation clearfix" role="navigation">';
                         echo '<nav class="page-nav">';
                         echo paginate_links(array(
-                            'current' => $paged,
+                            'current' => $current_page,
                             'total' => $total_pages,
                             'type' => 'plain',
                             'prev_text' => '<i class="fa fa-angle-left"></i>',
