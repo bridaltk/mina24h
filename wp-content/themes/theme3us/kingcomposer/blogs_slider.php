@@ -7,7 +7,7 @@
 	<div class="container">
 		<div class="blogs-slider owl-carousel" data-nav="<?php echo $nav; ?>" data-dots="<?php echo $dots; ?>" data-play="<?php echo $play; ?>" data-items="<?php echo $items; ?>">
 			<?php foreach( $select_post as $key => $item ){ ?>
-			<article data-delay="100" class="blogs-slider-item post animation3 inbottom" itemscope itemtype="http://schema.org/Article">
+			<article data-delay="100" class="blogs-slider-item post " itemscope itemtype="http://schema.org/Article">
 				
 					<div class="post-thumb">
 						<a href="<?php echo get_the_permalink($item->post); ?>">

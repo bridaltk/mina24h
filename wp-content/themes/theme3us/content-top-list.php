@@ -1,4 +1,4 @@
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'top-list-item clearfix animation3 inbottom' ); ?> data-delay="100" itemscope itemtype="http://schema.org/Article">
+<article id="post-<?php the_ID(); ?>" <?php post_class( 'top-list-item clearfix' ); ?> data-delay="100" itemscope itemtype="http://schema.org/Article">
     <div class="post-thumb">
         <a class="overlay" href="<?php the_permalink(); ?>">
             <?php the_post_thumbnail( 'thumbnail' ); ?>
