@@ -99,7 +99,7 @@ get_header(); ?>
                             and p.post_status='publish' 
                             and u.id = p.post_author 
                             GROUP by p.post_author
-                            order by post_count DESC";
+                            order by post_count DESC, u.user_registered DESC";
                             break;
 
                     };
